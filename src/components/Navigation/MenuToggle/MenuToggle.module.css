@@ -6,7 +6,7 @@
     color: #fff;
     font-size: 20px;
     cursor: pointer;
-    transition: all .22s ease-in;
+    transition: opacity, left .22s ease-in;
 }
 
 .MenuToggle {
