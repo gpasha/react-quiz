@@ -6,6 +6,7 @@ import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz'
 class Quiz extends Component {
 
     state = {
+        results: {}, // { [id]: 'success' or error }
         isFinishedQuiz: false,
         activeQuestion: 0,
         answerState: null, // { [id]: 'success' or 'error' }
@@ -44,9 +45,15 @@ class Quiz extends Component {
         }
 
         const question = this.state.quiz[this.state.activeQuestion]
+        const results = this.state.results
+
         if (question.wrightAnswerId === id) {
+            if (!results[question.id]) {
+                results[question.id] = 'success'
+            }
             this.setState({
-                answerState: {[id]: 'success'}
+                answerState: {[id]: 'success'},
+                results
             })
             if (this.isQuizFinished()) {
                 const timeout = window.setTimeout(() => {
@@ -67,8 +74,10 @@ class Quiz extends Component {
             }
         }
         else {
+            results[question.id] = 'error'
             this.setState({
-                answerState: {[id]: 'error'}
+                answerState: {[id]: 'error'},
+                results
             })
         }
     }
@@ -77,13 +86,24 @@ class Quiz extends Component {
         return this.state.activeQuestion + 1 === this.state.quiz.length
     }
 
+    refreshHandler = () => {
+        this.setState({
+            results: {},
+            isFinishedQuiz: false,
+            activeQuestion: 0,
+            answerState: null
+        })
+    }
+
     render() {
         return (
             <div className={quizClasses['Quiz']}>
                 <div className={quizClasses['Quiz-wrapper']}>
                     {
                         this.state.isFinishedQuiz
-                            ? <FinishedQuiz />
+                            ? <FinishedQuiz results={this.state.results}
+                                            quiz={this.state.quiz}
+                                            refreshHandler={this.refreshHandler} />
                             : <>
                                 <h1>Answer the questions</h1>
                                 <ActiceQuiz answers={this.state.quiz[this.state.activeQuestion].answers}
