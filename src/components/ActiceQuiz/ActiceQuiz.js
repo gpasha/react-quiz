@@ -1,21 +1,20 @@
 import React from 'react'
 import ActiceQuizStyles from './ActiceQuiz.module.css'
+import AnswersList from './AnswersList/AnswersList'
 
-const ActiceQuiz = () => {
+const ActiceQuiz = props => {
     return (
         <div className={ActiceQuizStyles['ActiceQuiz']}>
-            <p>
+            <p className={ActiceQuizStyles['Questions']}>
                 <span>
-                    <strong>1. </strong>
-                    How are you?
+                    <strong>{props.activeQuestion}. </strong>
+                    {props.question}
                 </span>
+                <small>{props.activeQuestion} from {props.queastionsCount}</small>
             </p>
-            <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-            </ul>
+            <AnswersList answers={props.answers}
+                         answerState={props.answerState}
+                         onAnswerClickHandler={props.onAnswerClickHandler} />
         </div>
     )
 }

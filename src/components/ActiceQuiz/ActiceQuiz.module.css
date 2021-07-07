@@ -1,7 +1,13 @@
 .ActiceQuiz {
     padding: 1rem;
-    border: 1px solid #fff;
+    border: 2px solid #fff;
     border-radius: 4px;
-    margin: 1rem;
+    margin: 0 0.5rem;
     color: #fff;
+}
+
+.Questions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
