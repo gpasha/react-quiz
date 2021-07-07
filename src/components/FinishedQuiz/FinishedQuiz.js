@@ -1,5 +1,6 @@
 import React from 'react'
 import classes from './FinishedQuiz.module.css'
+import Button from '../../UI/Button/Button'
 
 const FinishedQuiz = props => {
     console.log('FinishedQuiz props: ', props)
@@ -15,7 +16,7 @@ const FinishedQuiz = props => {
                         const cls = [
                             'fas',
                             props.results[quizItem.id] === 'error'
-                                ?  `fa-check ${classes.error}`
+                                ? `fa-check ${classes.error}`
                                 : `fa-times ${classes.success}`
                         ]
                         return (
@@ -30,7 +31,8 @@ const FinishedQuiz = props => {
             </ul>
             <p>Rigth {successCount} from {props.quiz.length}</p>
             <div>
-                <button onClick={props.refreshHandler}>Repeat</button>
+                <Button onClick={props.refreshHandler} type="primary">Repeat</Button>
+                <Button type="success">Go the test list</Button>
             </div>
         </div>
     )

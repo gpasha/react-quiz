@@ -1,0 +1,38 @@
+.Button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 1rem;
+    color: #000;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.Button:focus {
+    outline: none;
+}
+
+.Button:active {
+    box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, .3);
+}
+
+.Button:disabled {
+    background-color: #ccc;
+    color: #000;
+    cursor: not-allowed;
+}
+
+.success {
+    background-color: rgba(161, 240, 69, 1);
+}
+
+.error {
+    background-color: rgba(240, 87, 108, 1);
+}
+
+.primary {
+    background-color: #2884f6;
+    color: #fff;
+}
