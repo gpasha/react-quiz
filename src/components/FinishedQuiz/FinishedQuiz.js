@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import classes from './FinishedQuiz.module.css'
 import Button from '../../UI/Button/Button'
 
@@ -31,8 +32,10 @@ const FinishedQuiz = props => {
             </ul>
             <p>Rigth {successCount} from {props.quiz.length}</p>
             <div>
-                <Button onClick={props.refreshHandler} type="primary">Repeat</Button>
-                <Button type="success">Go the test list</Button>
+                <Button type="primary" onClick={props.refreshHandler} >Repeat</Button>
+                <Link to="/">
+                    <Button type="success">Go the test list</Button>
+                </Link>
             </div>
         </div>
     )

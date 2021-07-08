@@ -34,9 +34,10 @@
     color: #363d54;
     font-size: 30px;
     text-decoration: none;
+    opacity: .7;
     transition: opacity .3s;
 }
 
 .Drawer ul li a:hover, .active {
-    opacity: .7;
+    opacity: 1;
 }
