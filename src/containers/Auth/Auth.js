@@ -7,12 +7,13 @@ import is from 'is_js'
 class Auth extends Component {
 
     state = {
+        isFormValid: false,
         formControls: {
             email: {
                 value: '',
                 type: 'email',
                 label: 'Email',
-                errorMessage: '',
+                errorMessage: 'Please enter a valid email',
                 valid: false,
                 touched: false,
                 validation: {
@@ -24,7 +25,7 @@ class Auth extends Component {
                 value: '',
                 type: 'password',
                 label: 'Password',
-                errorMessage: '',
+                errorMessage: 'Min length of password is 6 symbols',
                 valid: false,
                 touched: false,
                 validation: {
@@ -50,14 +51,13 @@ class Auth extends Component {
             isValid = is.email(value) && isValid
         }
 
-        if (validation.minLengrh) {
-            isValid = value.length > validation.minLength && isValid
+        if (validation.minLength) {
+            isValid = value.length >= validation.minLength && isValid
         }
         return isValid
     }
 
     inputChangeHandler = (e, controlName) => {
-        console.log('value: ', e.target.value)
         const formControls = {...this.state.formControls}
         const control = {...formControls[controlName]}
 
@@ -66,8 +66,15 @@ class Auth extends Component {
         control.valid = this.validateControl(control.value, control.validation)
         formControls[controlName] = control
 
+        let isFormValid = true
+
+        Object.keys(formControls).forEach(name => {
+            isFormValid = formControls[name].valid && isFormValid                
+        })
+
         this.setState({
-            formControls
+            formControls,
+            isFormValid
         })
     }
 
@@ -75,7 +82,8 @@ class Auth extends Component {
         const inputs = Object.keys(this.state.formControls).map((controlName, index) => {
             const control = this.state.formControls[controlName]
             return (
-                <Input type={control.type}
+                <Input key={index}
+                       type={control.type}
                        label={control.label}
                        value={control.value}
                        valid={control.valid} 
@@ -96,30 +104,27 @@ class Auth extends Component {
         
     }
 
-    submitHandler = () => {
-        
+    submitHandler = (e) => {
+        e.preventDefault()
     }
 
     render() {
         return (
-
             <div className={classes.Auth}>
                 <div>
                     <h1>Authorization</h1>
-                    <form class={classes.AuthForm} onSubmit={this.submitHandler}>
+                    <form className={classes.AuthForm} onSubmit={this.submitHandler}>
 
                         { this.renderInputs()}
-                        {/*<Input type="password"
-                               label="Password"
-                               errorMessage="Test" />
-                         <input type="text" />
-                        <input type="text" /> */}
+                        
                         <Button type="success"
-                                onClick={this.loginHandler}>
+                                onClick={this.loginHandler}
+                                disabled={!this.state.isFormValid}>
                             Log in
                         </Button>
                         <Button type="primary"
-                                onClick={this.registerHandler}>
+                                onClick={this.registerHandler}
+                                disabled={!this.state.isFormValid}>
                             Registration
                         </Button>
                     </form>
