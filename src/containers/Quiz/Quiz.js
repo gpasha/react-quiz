@@ -2,38 +2,32 @@ import React, { Component } from 'react'
 import quizClasses from './Quiz.module.css'
 import ActiceQuiz from '../../components/ActiceQuiz/ActiceQuiz'
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz'
+import axios from '../../axios/axios-quiz'
+import Loader from '../../components/Loader/Loader'
 
 class Quiz extends Component {
 
     state = {
+        isLoading: true,
         results: {}, // { [id]: 'success' or error }
         isFinishedQuiz: false,
         activeQuestion: 0,
         answerState: null, // { [id]: 'success' or 'error' }
-        quiz: [
-            {
-                question: 'What color is cloud?',
-                id: 1,
-                wrightAnswerId: 3,
-                answers: [
-                    {text: 'Red', id: 1},
-                    {text: 'Green', id: 2},
-                    {text: 'Blue', id: 3},
-                    {text: 'Yellow', id: 4}
-                ]
-            },
-            {
-                question: 'What year was founded the ST city?',
-                id: 2,
-                wrightAnswerId: 2,
-                answers: [
-                    {text: '1700', id: 1},
-                    {text: '1703', id: 2},
-                    {text: '1800', id: 3},
-                    {text: '1803', id: 4}
-                ]
-            }
-        ]
+        quiz: []
+    }
+    
+    async componentDidMount() {
+        try {
+            const response = await axios.get(`/quizes/${this.props.match.params.id}.json`)
+            const quiz = response.data
+            this.setState({
+                quiz,
+                isLoading: false
+            })
+        }
+        catch(e) {
+            console.log('error:', e)
+        }
     }
 
     onAnswerClickHandler = (id) => {        
@@ -47,7 +41,7 @@ class Quiz extends Component {
         const question = this.state.quiz[this.state.activeQuestion]
         const results = this.state.results
 
-        if (question.wrightAnswerId === id) {
+        if (question.rightAnsweredId === id) {
             if (!results[question.id]) {
                 results[question.id] = 'success'
             }
@@ -100,19 +94,21 @@ class Quiz extends Component {
             <div className={quizClasses['Quiz']}>
                 <div className={quizClasses['Quiz-wrapper']}>
                     {
-                        this.state.isFinishedQuiz
-                            ? <FinishedQuiz results={this.state.results}
-                                            quiz={this.state.quiz}
-                                            refreshHandler={this.refreshHandler} />
-                            : <>
-                                <h1>Answer the questions</h1>
-                                <ActiceQuiz answers={this.state.quiz[this.state.activeQuestion].answers}
-                                            question={this.state.quiz[this.state.activeQuestion].question}
-                                            onAnswerClickHandler={this.onAnswerClickHandler}
-                                            activeQuestion={this.state.activeQuestion + 1}
-                                            queastionsCount={this.state.quiz.length}
-                                            answerState={this.state.answerState} />
-                              </>
+                        this.state.isLoading
+                            ?   <Loader />
+                            :   this.state.isFinishedQuiz
+                                    ? <FinishedQuiz results={this.state.results}
+                                                    quiz={this.state.quiz}
+                                                    refreshHandler={this.refreshHandler} />
+                                    : <>
+                                        <h1>Answer the questions</h1>
+                                        <ActiceQuiz answers={this.state.quiz[this.state.activeQuestion].answers}
+                                                    question={this.state.quiz[this.state.activeQuestion].question}
+                                                    onAnswerClickHandler={this.onAnswerClickHandler}
+                                                    activeQuestion={this.state.activeQuestion + 1}
+                                                    queastionsCount={this.state.quiz.length}
+                                                    answerState={this.state.answerState} />
+                                    </>
                     }
                 </div>
             </div>
