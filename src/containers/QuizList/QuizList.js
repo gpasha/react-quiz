@@ -8,6 +8,9 @@ import { fetchQuizes } from '../../redux/actions/quiz'
 class QuizList extends Component {
 
     renderQuizes() {
+        if (this.props.quizes === null ) {
+            return null
+        }
         return this.props.quizes.map(quiz  => {
             return (
                 <li key={quiz.id}>
@@ -29,7 +32,7 @@ class QuizList extends Component {
                 <div>
                     <h1>List of tests</h1>
                     {
-                        this.props.isLoading && this.props.quizes.length !== 0
+                        this.props.isLoading && (this.props.quizes === null || this.props.quizes?.length !== 0)
                             ? <Loader />
                             : <ul>
                                 { this.renderQuizes() }
