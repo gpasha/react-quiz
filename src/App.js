@@ -8,6 +8,7 @@ import QuizCreator from './containers/QuizCreator/QuizCreator'
 import QuizList from './containers/QuizList/QuizList'
 import Logout from './containers/Logout/Logout'
 import { connect } from 'react-redux'
+import { autoLogin } from './redux/actions/auth'
 
 function App(props) {
 
@@ -47,5 +48,10 @@ const mapStateToProps = state => {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    autoLogin: () => dispatch(autoLogin())
+  }
+}
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
