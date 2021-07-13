@@ -13,4 +13,3 @@ export const RESERT_QUIZ_CREATION = 'RESERT_QUIZ_CREATION'
 
 export const AUTH_SUCCESS = 'AUTH_SUCCESS'
 export const AUTH_LOGOUT = 'AUTH_LOGOUT'
-export const AUTO_LOGIN = 'AUTO_LOGIN'
