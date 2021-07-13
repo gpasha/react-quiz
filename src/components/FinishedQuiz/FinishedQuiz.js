@@ -4,11 +4,12 @@ import classes from './FinishedQuiz.module.css'
 import Button from '../../UI/Button/Button'
 
 const FinishedQuiz = props => {
-    console.log('FinishedQuiz props: ', props)
+
     const successCount = Object.keys(props.results).reduce((total, key) => {
         if (props.results[key] === 'success') total++
         return total
     }, 0)
+    
     return (
         <div className={classes.FinishedQuiz}>
             <ul>

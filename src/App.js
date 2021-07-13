@@ -12,8 +12,6 @@ import { autoLogin } from './redux/actions/auth'
 
 function App(props) {
 
-  console.log('props: ', props)
-
   let routes = (
     <Switch>
       <Route path='/auth' component={Auth} />
