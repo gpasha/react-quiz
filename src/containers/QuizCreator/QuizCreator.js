@@ -4,7 +4,8 @@ import Button from '../../UI/Button/Button'
 import { CreateControl, validate, validateForm } from '../../form/formFramework'
 import Select from '../../UI/Select/Select'
 import Input from '../../UI/Input/Input'
-import axios from '../../axios/axios-quiz'
+import { connect } from 'react-redux'
+import { createQuizQuestionItem, finishCreateQuiz } from '../../redux/actions/create'
 
 function createOptionControl(number) {
     return CreateControl (
@@ -39,7 +40,6 @@ function createFormControls() {
 class QuizCreator extends Component {
 
     state = {
-        quiz: [],
         isFormValid: false,
         rightAnsweredId: 1,
         formControls: createFormControls()
@@ -51,13 +51,11 @@ class QuizCreator extends Component {
 
     addQuestionHandler = e => {
         e.preventDefault()
-        const quiz =this.state.quiz.concat()
-        const index = quiz.length + 1
         const {question, option1, option2, option3, option4} =  this.state.formControls
 
         const questionItem = {
             question: question.value,
-            id: index,
+            id: this.props.quiz.length + 1,
             rightAnsweredId: this.state.rightAnsweredId,
             answers: [
                 {text: option1.value, id: option1.id},
@@ -67,31 +65,25 @@ class QuizCreator extends Component {
             ]
         }
 
-        quiz.push(questionItem)
+        this.props.createQuizQuestionItem(questionItem)
 
         this.setState({
-            quiz,
             isFormValid: false,
             rightAnsweredId: 1,
             formControls: createFormControls()
         })
     }
 
-    createQuizHandler = async e => {
+    createQuizHandler = e => {
         e.preventDefault()
-        try {
-            await axios.post('/quizes.json', this.state.quiz)
 
-            this.setState({
-                quiz: [],
-                isFormValid: false,
-                rightAnsweredId: 1,
-                formControls: createFormControls()
-            })
-        }
-        catch(e) {
-            console.log('error:', e)
-        }
+        this.setState({
+            isFormValid: false,
+            rightAnsweredId: 1,
+            formControls: createFormControls()
+        })
+
+        this.props.finishCreateQuiz()
     }
 
     changeHandler = (value, controlName) => {        
@@ -162,7 +154,7 @@ class QuizCreator extends Component {
                         </Button>
                         <Button type="success"
                                 label="Add Question"
-                                disabled={this.state.quiz.length === 0}
+                                disabled={this.props.quiz.length === 0}
                                 onClick={this.createQuizHandler}>
                             Create Test
                         </Button>
@@ -173,4 +165,17 @@ class QuizCreator extends Component {
     }
 }
 
-export default QuizCreator
+const mapStateToProps = state => {
+    return {
+        quiz: state.create.quiz
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        createQuizQuestionItem: item => dispatch(createQuizQuestionItem(item)),
+        finishCreateQuiz: () => dispatch(finishCreateQuiz())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuizCreator)
